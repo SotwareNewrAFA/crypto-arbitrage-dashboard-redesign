@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { CheckCheck, Zap } from 'lucide-react'
+import { Activity, CheckCheck, CreditCard, Gauge, LayoutDashboard, Settings, Wallet, Zap } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { arbitrages, metrics, positions, sparklines } from '@/lib/arb-data'
 import { Header } from './header'
@@ -20,19 +20,21 @@ export function Dashboard() {
   const settled = arbitrages.filter((a) => a.status === 'liquidado')
 
   return (
-    <div className="relative isolate min-h-screen overflow-x-hidden">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px] bg-[radial-gradient(60%_60%_at_50%_0%,oklch(0.8_0.15_168/0.07),transparent_70%)]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(to_right,oklch(1_0_0/0.025)_1px,transparent_1px),linear-gradient(to_bottom,oklch(1_0_0/0.025)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_at_top,black_20%,transparent_70%)]"
-      />
-
-      <Header />
-
-      <main className={cn('mx-auto flex max-w-7xl flex-col px-4 py-6 sm:px-6 lg:px-8', compact ? 'gap-4' : 'gap-6')}>
+    <div className="dashboard-stage relative isolate min-h-screen overflow-x-hidden p-3 sm:p-6">
+      <div aria-hidden="true" className="dashboard-orb pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px]" />
+      <div className="dashboard-shell mx-auto flex min-h-[calc(100vh-1.5rem)] max-w-[1480px] overflow-hidden rounded-[28px] border border-white/[0.08] bg-[#050506] shadow-2xl shadow-black/50">
+        <aside className="dashboard-sidebar hidden w-[82px] shrink-0 flex-col items-center border-r border-white/[0.07] bg-[#0a0a0d] py-5 lg:flex">
+          <div className="mb-12 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-400 to-fuchsia-500 text-sm font-semibold text-white shadow-lg shadow-violet-500/20">AD</div>
+          <nav aria-label="Navegación principal" className="flex flex-1 flex-col items-center gap-5 text-white/50">
+            {[LayoutDashboard, Activity, Wallet, CreditCard, Gauge, Settings].map((Icon, index) => (
+              <button key={index} type="button" className={cn('flex h-10 w-10 items-center justify-center rounded-xl transition-colors hover:bg-white/[0.08] hover:text-white', index === 0 && 'bg-violet-500/15 text-violet-300')} aria-label={['Dashboard', 'Actividad', 'Billetera', 'Tarjetas', 'Métricas', 'Ajustes'][index]}><Icon className="h-[18px] w-[18px]" /></button>
+            ))}
+          </nav>
+          <div className="h-9 w-9 rounded-full border border-white/10 bg-gradient-to-br from-slate-500 to-slate-800" aria-label="Perfil de usuario" />
+        </aside>
+        <div className="min-w-0 flex-1">
+          <Header />
+          <main className={cn('mx-auto flex max-w-[1320px] flex-col px-4 py-6 sm:px-6 lg:px-8', compact ? 'gap-4' : 'gap-6')}>
         <NavTabs
           active={tab}
           onChange={setTab}
@@ -123,7 +125,9 @@ export function Dashboard() {
           <ArbitrageTable title="Historial" subtitle={`${settled.length} arbitrajes liquidados`} rows={settled} compact={compact} />
         )}
         {tab === 'posiciones' && <PositionsTable rows={positions} compact={compact} />}
-      </main>
+          </main>
+        </div>
+      </div>
     </div>
   )
 }

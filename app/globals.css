@@ -68,12 +68,19 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply text-foreground font-sans;
+    background: #1b222c;
     font-feature-settings: 'cv11', 'ss01';
   }
 }
 
 @layer components {
+  .dashboard-shell {
+    background: radial-gradient(circle at 70% 0%, oklch(0.25 0.035 285 / 12%), transparent 34%), #050506;
+  }
+  .dashboard-stage {
+    background: linear-gradient(135deg, #1d2530 0%, #161c25 100%);
+  }
   .glass {
     position: relative;
     isolation: isolate;
